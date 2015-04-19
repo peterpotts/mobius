@@ -8,6 +8,7 @@ case class Tensor(left: Matrix, right: Matrix) {
   lazy val gcd = left.gcd gcd right.gcd
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
+  lazy val angle = left.angle + right.angle
 
   lazy val valid: Boolean = left.valid && right.valid
 

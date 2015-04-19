@@ -13,10 +13,16 @@ object Tee {
       case Some((digit, tensor)) =>
         digit -> new Tee(tensor, tee.leftChain, tee.rightChain)
       case None =>
-        head(new Tee(
-          tee.tensor * tee.leftChain.matrix ** tee.rightChain.matrix,
-          tee.leftChain.chain,
-          tee.rightChain.chain))
+        if (tee.tensor.angle > tee.tensor.transpose.angle)
+          head(new Tee(
+            tee.tensor * tee.leftChain.matrix,
+            tee.leftChain.chain,
+            tee.rightChain))
+        else
+          head(new Tee(
+            tee.tensor ** tee.rightChain.matrix,
+            tee.leftChain,
+            tee.rightChain.chain))
     }
 
   def stream(tee: Tee): Stream[Matrix] =

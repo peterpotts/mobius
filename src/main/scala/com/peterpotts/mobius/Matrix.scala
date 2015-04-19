@@ -11,6 +11,7 @@ case class Matrix(left: Vector, right: Vector) {
   lazy val gcd = left.gcd gcd right.gcd
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
+  lazy val angle = Math.abs(left.angle - right.angle)
 
   lazy val valid: Boolean =
     if (spin < 0)
