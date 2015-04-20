@@ -5,7 +5,7 @@ case class Vector(top: BigInt, bottom: BigInt) {
   lazy val gcd = top gcd bottom
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
-  lazy val angle = Math.atan2(top.toDouble, bottom.toDouble)
+  lazy val angle = top.bitLength - bottom.bitLength
 
   def *(that: BigInt): Vector = Vector(top * that, bottom * that)
 

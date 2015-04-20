@@ -22,12 +22,12 @@ case class Matrix(left: Vector, right: Vector) {
       false
 
   lazy val pull: Option[(Matrix, Matrix)] = {
-    if (beta.valid)
-      Some(Digit.beta -> beta)
-    else if (alpha.valid)
+    if (alpha.valid)
       Some(Digit.alpha -> alpha)
     else if (gamma.valid)
       Some(Digit.gamma -> gamma)
+    else if (beta.valid)
+      Some(Digit.beta -> beta)
     else
       None
   }
