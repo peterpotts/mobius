@@ -1,11 +1,16 @@
 package com.peterpotts.mobius
 
 trait Digitizer {
-  def head: Matrix
+  val head: Matrix
 
-  def tail: Digitizer
+  val tail: Digitizer
 
-  def toStream: Stream[Matrix] = head #:: tail.toStream
+  lazy val toStream: Stream[Matrix] = head #:: tail.toStream
 
   def digits(n: Int) = toStream.take(n).reduce(_ * _)
+
+  def debug[T](value: T): T = {
+    //println(value)
+    value
+  }
 }

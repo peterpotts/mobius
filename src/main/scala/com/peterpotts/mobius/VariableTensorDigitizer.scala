@@ -2,6 +2,9 @@ package com.peterpotts.mobius
 
 import scala.annotation.tailrec
 
+/**
+ * Not working!!!
+ */
 class VariableTensorDigitizer(
   tensor: Tensor,
   leftContinuation: => Digitizer,
@@ -14,7 +17,7 @@ class VariableTensorDigitizer(
   @tailrec private def digitize: (Matrix, Digitizer) =
     split match {
       case Some((digit, remainder)) =>
-        digit -> new FixedTensorDigitizer(remainder, leftDigitizer, rightDigitizer)
+        digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer)
       case None =>
         if (tensor.range > tensor.transpose.range)
           new VariableTensorDigitizer(tensor * leftDigitizer.head, leftDigitizer.tail, rightDigitizer).digitize
@@ -23,11 +26,7 @@ class VariableTensorDigitizer(
     }
 
   private lazy val matrix = Matrix(tensor.max, tensor.min)
-  private lazy val remnants = {
-    val xxx = matrix.inverse * tensor
-    println(xxx)
-    xxx
-  }
+  private lazy val remnants = debug(matrix.inverse <*> tensor)
 
   private lazy val split =
     if (tensor.min.top.signum == 0 && tensor.max.bottom.signum == 0)

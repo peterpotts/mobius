@@ -28,11 +28,11 @@ class FixedTensorDigitizer(
 
   private lazy val split =
     if (alpha.valid)
-      Some(Digit.alpha -> alpha)
+      Some(Digit.alpha -> debug(alpha))
     else if (gamma.valid)
-      Some(Digit.gamma -> gamma)
+      Some(Digit.gamma -> debug(gamma))
     else if (beta.valid)
-      Some(Digit.beta -> beta)
+      Some(Digit.beta -> debug(beta))
     else
       None
 }

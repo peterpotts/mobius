@@ -21,6 +21,8 @@ case class Matrix(left: Vector, right: Vector) {
     left * that.right.top + right * that.right.bottom)
 
   def *(that: Tensor): Tensor = Tensor(this * that.left, this * that.right)
+
+  def <*>(that: Tensor): Tensor = (this * that).normalize
 }
 
 object Matrix {
