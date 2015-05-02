@@ -10,8 +10,8 @@ object Application extends LazyLogging {
     val oneTo4 = oneTo(4)
     def sqrt2: Digitizer = new VariableMatrixDigitizer(oneTo2, sqrt2)
     def sqrt4: Digitizer = new VariableMatrixDigitizer(oneTo4, sqrt4)
-    //val result = new FixedTensorDigitizer(Operation.times, sqrt4, sqrt2)
-    //println(result.digits(1000).min.rational)
+    val result = new FixedTensorDigitizer(Operation.divide, sqrt4, sqrt2)
+    println(result.precision(1000).min.rational)
 
 
     //println(new FixedMatrixDigitizer(Matrix.identity, sqrt2).digits(6).min.rational)
@@ -22,7 +22,7 @@ object Application extends LazyLogging {
     def em(n: Int) = Matrix(Vector(2 * n + 2, 2 * n + 1), Vector(2 * n + 1, 2 * n))
     def en(n: Int): Digitizer = new VariableMatrixDigitizer(em(n), en(n + 1))
     val e = new FixedMatrixDigitizer(em(0), en(1))
-    println(e.digits(1000).min.rational)
+    //println(e.precision(1000).min.rational)
 
     def expt(n: Int) = Tensor(
       Matrix(Vector(2 * n + 2, 2 * n + 1), Vector(2 * n + 1, 2 * n)),
@@ -30,12 +30,12 @@ object Application extends LazyLogging {
 
     def expn(n: Int, x: Digitizer): Digitizer = new FixedTensorDigitizer(expt(n), x, expn(n+1,x))
 
-    def exp(x: Digitizer) = expn(0, new FixedMatrixDigitizer(Digit.s0.inverse, x))
+    def exp(x: Digitizer) = expn(0, x)
 
-    //println(exp(sqrt2).digits(400).min.rational)
+    //println(exp(sqrt4).precision(400).min.rational)
 
-    val result = new FixedTensorDigitizer(Operation.times, sqrt4, sqrt2)
-    println(result.digits(100).min.rational)
+    //val result = new FixedTensorDigitizer(Operation.times, sqrt4, sqrt2)
+    //println(result.precision(100).min.rational)
   }
 
   def main2(args: Array[String]): Unit = {

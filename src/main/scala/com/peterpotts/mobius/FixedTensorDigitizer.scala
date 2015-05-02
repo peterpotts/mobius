@@ -22,17 +22,17 @@ class FixedTensorDigitizer(
           new FixedTensorDigitizer(tensor ** rightDigitizer.head, leftDigitizer, rightDigitizer.tail).digitize
     }
 
-  private lazy val alpha = Digit.alpha.inverse * tensor
-  private lazy val beta = Digit.beta.inverse * tensor
-  private lazy val gamma = Digit.gamma.inverse * tensor
+  private lazy val alpha = Digit.dMinus.inverse * tensor
+  private lazy val beta = Digit.dZero.inverse * tensor
+  private lazy val gamma = Digit.dPlus.inverse * tensor
 
   private lazy val split =
     if (alpha.valid)
-      Some(Digit.alpha -> debug(alpha))
+      Some(Digit.dMinus -> debug(alpha))
     else if (gamma.valid)
-      Some(Digit.gamma -> debug(gamma))
+      Some(Digit.dPlus -> debug(gamma))
     else if (beta.valid)
-      Some(Digit.beta -> debug(beta))
+      Some(Digit.dZero -> debug(beta))
     else
       None
 }

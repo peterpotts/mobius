@@ -10,6 +10,12 @@ case class Tensor(left: Matrix, right: Matrix) {
   lazy val min = Matrix(left.min, right.min).min
   lazy val max = Matrix(left.max, right.max).max
 
+  lazy val unsigned =
+    left.left.signum == left.right.signum &&
+      left.right.signum == right.left.signum &&
+      right.left.signum == right.right.signum &&
+      right.right.signum != 0
+
   def *(that: BigInt): Tensor = Tensor(left * that, right * that)
 
   def /(that: BigInt): Tensor = Tensor(left / that, right / that)

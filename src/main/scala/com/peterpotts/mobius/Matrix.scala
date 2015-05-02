@@ -11,6 +11,7 @@ case class Matrix(left: Vector, right: Vector) {
   lazy val range = Math.abs(left.range - right.range)
   lazy val (min, max) = if (spin < 0) (left, right) else (right, left)
   lazy val valid = min.top.signum >= 0 && max.bottom.signum >= 0
+  lazy val unsigned = left.signum == right.signum && right.signum != 0
 
   def *(that: BigInt): Matrix = Matrix(left * that, right * that)
 

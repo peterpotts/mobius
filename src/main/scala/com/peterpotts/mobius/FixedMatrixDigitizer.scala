@@ -15,17 +15,17 @@ class FixedMatrixDigitizer(matrix: Matrix, continuation: => Digitizer) extends D
         new FixedMatrixDigitizer(matrix * digitizer.head, digitizer.tail).digitize
     }
 
-  private lazy val alpha = Digit.alpha.inverse * matrix
-  private lazy val beta = Digit.beta.inverse * matrix
-  private lazy val gamma = Digit.gamma.inverse * matrix
+  private lazy val alpha = Digit.dMinus.inverse * matrix
+  private lazy val beta = Digit.dZero.inverse * matrix
+  private lazy val gamma = Digit.dPlus.inverse * matrix
 
   private lazy val split =
     if (alpha.valid)
-      Some(Digit.alpha -> alpha)
+      Some(Digit.dMinus -> alpha)
     else if (gamma.valid)
-      Some(Digit.gamma -> gamma)
+      Some(Digit.dPlus -> gamma)
     else if (beta.valid)
-      Some(Digit.beta -> beta)
+      Some(Digit.dZero -> beta)
     else
       None
 }
