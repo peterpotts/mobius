@@ -14,7 +14,7 @@ scmInfo := Some(
     "scm:git:https://github.com/peterpotts/mobius.git",
     Some("scm:git:git@github.com:peterpotts/mobius.git")))
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.7"
 
 scalacOptions ++= Seq(
   "-unchecked",
@@ -29,54 +29,79 @@ scalacOptions ++= Seq(
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
-libraryDependencies ++= {
-  val akkaVersion = "2.3.8"
-  val sprayVersion = "1.3.2"
-  val phantomVersion = "1.5.0"
-  val slf4jVersion = "1.7.10"
+javaOptions ++= Seq("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005")
 
-  Seq(
-    "rhino" % "js" % "1.7R2" % "test",
-    "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-    "io.spray" %% "spray-routing" % sprayVersion,
-    "io.spray" %% "spray-caching" % sprayVersion,
-    "io.spray" %% "spray-client" % sprayVersion,
-    "io.spray" %% "spray-testkit" % sprayVersion % "test",
-    "com.gettyimages" %% "spray-swagger" % "0.5.0",
-    "com.typesafe" % "config" % "1.2.1",
-    "com.websudos" %% "phantom-dsl" % phantomVersion,
-    "com.websudos" %% "phantom-zookeeper" % phantomVersion exclude("log4j", "log4j"),
-    "net.jpountz.lz4" % "lz4" % "1.3.0",
-    "io.dropwizard.metrics" % "metrics-core" % "3.1.0",
-    "org.slf4j" % "slf4j-api" % slf4jVersion,
-    "org.slf4j" % "log4j-over-slf4j" % slf4jVersion, // See exclude("log4j", "log4j")
-    "org.slf4j" % "jcl-over-slf4j" % slf4jVersion, // See exclude("commons-logging", "commons-logging")
-    "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
-    "ch.qos.logback" % "logback-classic" % "1.1.2")
+libraryDependencies ++= {
+  object Versions {
+    val scalatest = "2.2.4"
+    val mockito = "1.10.19"
+    val akka = "2.3.11"
+    val spray = "1.3.3"
+    val jodaMoney = "0.10.0"
+    val eddsa = "0.0.1-SNAPSHOT"
+    val phantom = "1.8.12"
+    val cassandra = "2.1.5"
+    val lz4 = "1.2.0"
+    val codahale = "3.0.2"
+    val aws = "1.9.40"
+    val rhino = "1.7R2"
+    val spraySwagger = "0.5.1"
+    val typesafeConfig = "1.2.1"
+    val camel = "2.15.2"
+    val zip4j = "1.3.2"
+    val openCsv = "2.3"
+    val mockFtpServer = "2.6"
+    val slf4j = "1.7.12"
+    val logback = "1.1.3"
+    val hazelcast = "3.6-EA2"
+  }
+
+  object Dependencies {
+    val scalatest = "org.scalatest" %% "scalatest" % Versions.scalatest
+
+    val mockitoCore = "org.mockito" % "mockito-core" % Versions.mockito
+
+    val akkaActor = "com.typesafe.akka" %% "akka-actor" % Versions.akka
+    val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % Versions.akka
+    val akkaAgent = "com.typesafe.akka" %% "akka-agent" % Versions.akka
+    val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % Versions.akka
+
+    val typesafeConfig = "com.typesafe" % "config" % Versions.typesafeConfig
+
+    val slf4jApi = "org.slf4j" % "slf4j-api" % Versions.slf4j
+    // log4jOverSlf4j: Associated with exclude("log4j", "log4j")
+    val log4jOverSlf4j = "org.slf4j" % "log4j-over-slf4j" % Versions.slf4j
+    // jclOverSlf4j: Associated with exclude("commons-logging", "commons-logging")
+    val jclOverSlf4j = "org.slf4j" % "jcl-over-slf4j" % Versions.slf4j
+    val logbackClassic = "ch.qos.logback" % "logback-classic" % Versions.logback
+  }
+
+  import Dependencies._
+  Seq(scalatest % "test",
+    mockitoCore % "test",
+    akkaActor,
+    akkaSlf4j,
+    akkaAgent,
+    akkaTestkit % "test",
+    typesafeConfig,
+    slf4jApi,
+    log4jOverSlf4j,
+    jclOverSlf4j,
+    logbackClassic)
 }
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases"),
   Resolver.typesafeRepo("releases"),
-  "Spray Repository" at "http://repo.spray.io",
-  "Twitter Repository" at "http://maven.twttr.com",
-  "Websudos Repository" at "http://maven.websudos.co.uk/ext-release-local")
+  "Spray Repository" at "http://repo.spray.io")
 
 enablePlugins(com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging)
-
-net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 mainClass in assembly := Some("com.peterpotts.mobius.Application")
 
 assemblyMergeStrategy in assembly := {
-  case "com/twitter/common/args/apt/cmdline.arg.info.txt.1" => MergeStrategy.discard
-  case "com/websudos/phantom/Manager$.class" => MergeStrategy.first
-  case "com/websudos/phantom/Manager.class" => MergeStrategy.first
-  case "logback.xml" => MergeStrategy.first
+  case "reference.conf" => MergeStrategy.first
   case pathList => (assemblyMergeStrategy in assembly).value(pathList)
 }
 
@@ -89,4 +114,3 @@ packageDescription := "Exact real arithmetic using Mobius transformations."
 daemonUser in Linux := normalizedName.value
 
 daemonGroup in Linux := (daemonUser in Linux).value
-
