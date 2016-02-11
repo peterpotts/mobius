@@ -36,24 +36,13 @@ libraryDependencies ++= {
     val scalatest = "2.2.4"
     val mockito = "1.10.19"
     val akka = "2.3.11"
-    val spray = "1.3.3"
-    val jodaMoney = "0.10.0"
+    val jodaConvert = "1.8"
+    val jodaTime = "2.9.2"
     val eddsa = "0.0.1-SNAPSHOT"
-    val phantom = "1.8.12"
-    val cassandra = "2.1.5"
-    val lz4 = "1.2.0"
-    val codahale = "3.0.2"
-    val aws = "1.9.40"
-    val rhino = "1.7R2"
-    val spraySwagger = "0.5.1"
     val typesafeConfig = "1.2.1"
-    val camel = "2.15.2"
-    val zip4j = "1.3.2"
-    val openCsv = "2.3"
-    val mockFtpServer = "2.6"
+    val scalaLogging = "3.1.0"
     val slf4j = "1.7.12"
     val logback = "1.1.3"
-    val hazelcast = "3.6-EA2"
   }
 
   object Dependencies {
@@ -66,7 +55,11 @@ libraryDependencies ++= {
     val akkaAgent = "com.typesafe.akka" %% "akka-agent" % Versions.akka
     val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % Versions.akka
 
+    val jodaConvert = "org.joda" % "joda-convert" % Versions.jodaConvert
+    val jodaTime = "joda-time" % "joda-time" % Versions.jodaTime
+
     val typesafeConfig = "com.typesafe" % "config" % Versions.typesafeConfig
+    val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging
 
     val slf4jApi = "org.slf4j" % "slf4j-api" % Versions.slf4j
     // log4jOverSlf4j: Associated with exclude("log4j", "log4j")
@@ -77,26 +70,29 @@ libraryDependencies ++= {
   }
 
   import Dependencies._
-  Seq(scalatest % "test",
+
+  Seq(
+    scalatest % "test",
     mockitoCore % "test",
     akkaActor,
     akkaSlf4j,
     akkaAgent,
     akkaTestkit % "test",
+    jodaConvert,
+    jodaTime,
     typesafeConfig,
+    scalaLogging,
     slf4jApi,
     log4jOverSlf4j,
     jclOverSlf4j,
     logbackClassic)
 }
 
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases"),
-  Resolver.typesafeRepo("releases"),
-  "Spray Repository" at "http://repo.spray.io")
-
 enablePlugins(com.typesafe.sbt.packager.archetypes.JavaServerAppPackaging)
+
+/*-----------------*/
+/* Assembly plugin */
+/*-----------------*/
 
 mainClass in assembly := Some("com.peterpotts.mobius.Application")
 
@@ -104,6 +100,10 @@ assemblyMergeStrategy in assembly := {
   case "reference.conf" => MergeStrategy.first
   case pathList => (assemblyMergeStrategy in assembly).value(pathList)
 }
+
+/*-----------------*/
+/* Packager plugin */
+/*-----------------*/
 
 maintainer in Linux := "Peter Potts <peter.potts@cointrust.com>"
 

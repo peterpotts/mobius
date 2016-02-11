@@ -12,7 +12,7 @@ trait Digitizer {
     product #:: fold(product, tail.tail)
   }
 
-  lazy val precision = head #:: fold(stream.head, stream.tail)
+  lazy val precision: Stream[Matrix] = head #:: fold(stream.head, stream.tail)
 
   def debug[T](value: T): T = {
     //println(value)

@@ -19,7 +19,7 @@ class VariableTensorDigitizer(
       case Some((digit, remainder)) =>
         digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer)
       case None =>
-        if (tensor.range > tensor.transpose.range)
+        if (tensor.range < tensor.transpose.range)
           new VariableTensorDigitizer(tensor * leftDigitizer.head, leftDigitizer.tail, rightDigitizer).digitize
         else
           new VariableTensorDigitizer(tensor ** rightDigitizer.head, leftDigitizer, rightDigitizer.tail).digitize

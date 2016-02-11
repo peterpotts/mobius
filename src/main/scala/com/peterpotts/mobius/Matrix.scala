@@ -17,9 +17,11 @@ case class Matrix(left: Vector, right: Vector) {
 
   def /(that: BigInt): Matrix = Matrix(left / that, right / that)
 
-  def *(that: Matrix): Matrix = Matrix(
-    left * that.left.top + right * that.left.bottom,
-    left * that.right.top + right * that.right.bottom)
+  def *(that: Vector): Vector = Vector(
+    left.top * that.top + right.top * that.bottom,
+    left.bottom * that.top + right.bottom * that.bottom)
+
+  def *(that: Matrix): Matrix = Matrix(this * that.left, this * that.right)
 
   def *(that: Tensor): Tensor = Tensor(this * that.left, this * that.right)
 

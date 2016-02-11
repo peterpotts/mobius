@@ -20,7 +20,11 @@ case class Tensor(left: Matrix, right: Matrix) {
 
   def /(that: BigInt): Tensor = Tensor(left / that, right / that)
 
-  def *(that: Matrix): Tensor = Tensor(left * that, right * that)
+  def *(that: Vector): Matrix = (transpose ** that).transpose
 
-  def **(that: Matrix): Tensor = (transpose * that).transpose
+  def **(that: Vector): Matrix = Matrix(left * that, right * that)
+
+  def *(that: Matrix): Tensor = (transpose ** that).transpose
+
+  def **(that: Matrix): Tensor = Tensor(left * that, right * that)
 }
