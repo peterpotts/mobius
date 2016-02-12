@@ -1,31 +1,31 @@
 package com.peterpotts.mobius
 
-import scala.annotation.tailrec
-
-class FixedMatrixDigitizer(matrix: Matrix, continuation: => Digitizer) extends Digitizer {
-  private lazy val digitizer = continuation
+class FixedMatrixDigitizer(matrix: Matrix, _digitizer: => Digitizer) extends Digitizer {
+  private lazy val digitizer = _digitizer
 
   lazy val (head, tail) = digitize
 
-  @tailrec private def digitize: (Matrix, Digitizer) =
-    split match {
-      case Some((digit, remainder)) =>
-        digit -> new FixedMatrixDigitizer(remainder, digitizer)
-      case None =>
-        new FixedMatrixDigitizer(matrix * digitizer.head, digitizer.tail).digitize
+  private lazy val digitize: (Matrix, Digitizer) = {
+    val emit = {
+      lazy val alpha = Digit.dMinus.inverse * matrix
+      lazy val beta = Digit.dZero.inverse * matrix
+      lazy val gamma = Digit.dPlus.inverse * matrix
+
+      if (alpha.unsigned)
+        Some(Digit.dMinus -> alpha)
+      else if (gamma.unsigned)
+        Some(Digit.dPlus -> gamma)
+      else if (beta.unsigned)
+        Some(Digit.dZero -> beta)
+      else
+        None
     }
 
-  private lazy val alpha = Digit.dMinus.inverse * matrix
-  private lazy val beta = Digit.dZero.inverse * matrix
-  private lazy val gamma = Digit.dPlus.inverse * matrix
-
-  private lazy val split =
-    if (alpha.unsigned)
-      Some(Digit.dMinus -> alpha)
-    else if (gamma.unsigned)
-      Some(Digit.dPlus -> gamma)
-    else if (beta.unsigned)
-      Some(Digit.dZero -> beta)
-    else
-      None
+    emit map {
+      case (digit, remainder) =>
+        digit -> new FixedMatrixDigitizer(remainder, digitizer)
+    } getOrElse {
+      new FixedMatrixDigitizer(matrix * digitizer.head, digitizer.tail).digitize
+    }
+  }
 }

@@ -5,13 +5,18 @@ import com.typesafe.scalalogging.LazyLogging
 
 //noinspection ScalaStyle
 object Application extends LazyLogging {
-  def main999(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit = {
+    fixedArithmetic()
+    variableArithmetic()
+  }
+
+  def fixedArithmetic(): Unit = {
     val oneTo: BigInt => Matrix = n => Matrix(Vector(1, 1), Vector(n, 1))
     val oneTo2 = oneTo(2)
     val oneTo4 = oneTo(4)
 
-    def sqrt2: Digitizer = new VariableMatrixDigitizer(oneTo2, sqrt2)
-    def sqrt4: Digitizer = new VariableMatrixDigitizer(oneTo4, sqrt4)
+    def sqrt2: Digitizer = new FixedMatrixDigitizer(oneTo2, sqrt2)
+    def sqrt4: Digitizer = new FixedMatrixDigitizer(oneTo4, sqrt4)
 
     println("Sqrt 4 + Sqrt 2 = " + new FixedTensorDigitizer(Tensor.plus, sqrt4, sqrt2).precision(100).min.rational)
     println("Sqrt 4 - Sqrt 2 = " + new FixedTensorDigitizer(Tensor.minus, sqrt4, sqrt2).precision(100).min.rational)
@@ -19,7 +24,7 @@ object Application extends LazyLogging {
     println("Sqrt 4 / Sqrt 2 = " + new FixedTensorDigitizer(Tensor.divide, sqrt4, sqrt2).precision(100).min.rational)
   }
 
-  def main(args: Array[String]): Unit = {
+  def variableArithmetic(): Unit = {
     val oneTo: BigInt => Matrix = n => Matrix(Vector(1, 1), Vector(n, 1))
     val oneTo2 = oneTo(2)
     val oneTo4 = oneTo(4)
