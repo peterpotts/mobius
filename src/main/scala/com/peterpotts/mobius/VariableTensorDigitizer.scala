@@ -2,9 +2,6 @@ package com.peterpotts.mobius
 
 import scala.annotation.tailrec
 
-/**
- * Not working!!!
- */
 class VariableTensorDigitizer(
   tensor: Tensor,
   leftContinuation: => Digitizer,
@@ -17,20 +14,30 @@ class VariableTensorDigitizer(
   @tailrec private def digitize: (Matrix, Digitizer) =
     split match {
       case Some((digit, remainder)) =>
-        digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer)
+        digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer).absorb
       case None =>
-        if (tensor.range < tensor.transpose.range)
-          new VariableTensorDigitizer(tensor * leftDigitizer.head, leftDigitizer.tail, rightDigitizer).digitize
-        else
-          new VariableTensorDigitizer(tensor ** rightDigitizer.head, leftDigitizer, rightDigitizer.tail).digitize
+        absorb.digitize
     }
+
+  private def absorb =
+    if (tensor.range < tensor.transpose.range)
+      new VariableTensorDigitizer(tensor * leftDigitizer.head, leftDigitizer.tail, rightDigitizer)
+    else
+      new VariableTensorDigitizer(tensor ** rightDigitizer.head, leftDigitizer, rightDigitizer.tail)
 
   private lazy val matrix = Matrix(tensor.max, tensor.min)
   private lazy val remnants = debug(matrix.inverse <*> tensor)
 
-  private lazy val split =
-    if (tensor.min.top.signum == 0 && tensor.max.bottom.signum == 0)
-      None
-    else
+  private lazy val split:Option[(Matrix,Tensor)] ={
+    if (remnants.unsigned){
+      //println(s"Emit $matrix")
+      //println(s"Remnants $remnants")
+      //println(s"remnants.unsigned = ${remnants.unsigned}")
+      //println(s"Emit $matrix")
       Some(matrix -> remnants)
+    }else {
+      None
+    }
+
+  }
 }
