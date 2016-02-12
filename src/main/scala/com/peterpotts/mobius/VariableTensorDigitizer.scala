@@ -14,12 +14,12 @@ class VariableTensorDigitizer(
   @tailrec private def digitize: (Matrix, Digitizer) =
     split match {
       case Some((digit, remainder)) =>
-        digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer).absorb
+        digit -> new VariableTensorDigitizer(remainder, leftDigitizer, rightDigitizer).absorb // TODO lazy!!
       case None =>
         absorb.digitize
     }
 
-  private def absorb =
+  private lazy val absorb =
     if (tensor.range < tensor.transpose.range)
       new VariableTensorDigitizer(tensor * leftDigitizer.head, leftDigitizer.tail, rightDigitizer)
     else

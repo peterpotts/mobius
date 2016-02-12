@@ -12,14 +12,15 @@ class FixedTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Digit
       case Some((digit, remainder)) =>
         digit -> new FixedTensorDigitizer(remainder, left, right)
       case None =>
-        if (tensor.range < tensor.transpose.range) {
-          new FixedTensorDigitizer(tensor * left.head, left.tail, right).digitize
-        } else {
-          new FixedTensorDigitizer(tensor ** right.head, left, right.tail).digitize
-        }
+        absorb.digitize
     }
 
-
+  private lazy val absorb =
+    if (tensor.range < tensor.transpose.range) {
+      new FixedTensorDigitizer(tensor * left.head, left.tail, right)
+    } else {
+      new FixedTensorDigitizer(tensor ** right.head, left, right.tail)
+    }
 
   private lazy val alpha = Digit.dMinus.inverse * tensor
   private lazy val beta = Digit.dZero.inverse * tensor
