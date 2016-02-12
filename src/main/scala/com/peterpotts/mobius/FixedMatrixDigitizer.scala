@@ -20,11 +20,11 @@ class FixedMatrixDigitizer(matrix: Matrix, continuation: => Digitizer) extends D
   private lazy val gamma = Digit.dPlus.inverse * matrix
 
   private lazy val split =
-    if (alpha.valid)
+    if (alpha.unsigned)
       Some(Digit.dMinus -> alpha)
-    else if (gamma.valid)
+    else if (gamma.unsigned)
       Some(Digit.dPlus -> gamma)
-    else if (beta.valid)
+    else if (beta.unsigned)
       Some(Digit.dZero -> beta)
     else
       None

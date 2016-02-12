@@ -15,20 +15,10 @@ object Application extends LazyLogging {
     def sqrt2: Digitizer = new VariableMatrixDigitizer(oneTo2, sqrt2)
     def sqrt4: Digitizer = new VariableMatrixDigitizer(oneTo4, sqrt4)
 
-    val result: Digitizer = new FixedTensorDigitizer(Operation.minus, sqrt4, sqrt2)
-
-    println("Sqrt 2 = " + sqrt2.precision(100).min.rational)
-    println("Sqrt 4 = " + sqrt4.precision(100).min.rational)
-
-    println("Sqrt 4 - Sqrt 2 = " + result.precision(100).min.rational)
-
-    println(Operation.minus * Matrix(Vector(2, 1), Vector(2, 1)) ** Matrix(Vector(1, 2), Vector(1, 2)))
-    //
-    //
-    //    val x = Operation.divide ** sqrt4.precision(100) * sqrt2.precision(100)
-    //
-    //    val y = new FixedMatrixDigitizer(Matrix.identity, x)
-    //    println(x.min.rational)
+    println("Sqrt 4 + Sqrt 2 = " + new FixedTensorDigitizer(Tensor.plus, sqrt4, sqrt2).precision(100).min.rational)
+    println("Sqrt 4 - Sqrt 2 = " + new FixedTensorDigitizer(Tensor.minus, sqrt4, sqrt2).precision(100).min.rational)
+    println("Sqrt 4 * Sqrt 2 = " + new FixedTensorDigitizer(Tensor.times, sqrt4, sqrt2).precision(100).min.rational)
+    println("Sqrt 4 / Sqrt 2 = " + new FixedTensorDigitizer(Tensor.divide, sqrt4, sqrt2).precision(100).min.rational)
   }
 
   def main2(args: Array[String]): Unit = {

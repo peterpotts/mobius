@@ -20,11 +20,18 @@ case class Tensor(left: Matrix, right: Matrix) {
 
   def /(that: BigInt): Tensor = Tensor(left / that, right / that)
 
-  def *(that: Vector): Matrix = (transpose ** that).transpose
+  def *(that: Vector): Matrix = transpose ** that
 
   def **(that: Vector): Matrix = Matrix(left * that, right * that)
 
   def *(that: Matrix): Tensor = (transpose ** that).transpose
 
   def **(that: Matrix): Tensor = Tensor(left * that, right * that)
+}
+
+object Tensor {
+  val plus = Tensor(Matrix(Vector(0, 0), Vector(1, 0)), Matrix(Vector(1, 0), Vector(0, 1)))
+  val minus = Tensor(Matrix(Vector(0, 0), Vector(1, 0)), Matrix(Vector(-1, 0), Vector(0, 1)))
+  val times = Tensor(Matrix(Vector(1, 0), Vector(0, 0)), Matrix(Vector(0, 0), Vector(0, 1)))
+  val divide = Tensor(Matrix(Vector(0, 0), Vector(1, 0)), Matrix(Vector(0, 1), Vector(0, 0)))
 }

@@ -30,13 +30,14 @@ class FixedTensorDigitizer(
   private lazy val gamma = Digit.dPlus.inverse * tensor
 
   private lazy val split =
-    if (alpha.valid) {
+    if (alpha.unsigned) {
       //println(s"Emit - from $tensor leaving $alpha")
+      //println(s"$alpha.valid = ${alpha.valid}")
       Some(Digit.dMinus -> debug(alpha))
-    } else if (gamma.valid) {
+    } else if (gamma.unsigned) {
       //println(s"Emit + from $tensor leaving $gamma")
       Some(Digit.dPlus -> debug(gamma))
-    } else if (beta.valid) {
+    } else if (beta.unsigned) {
       //println(s"Emit 0 from $tensor leaving $beta")
       Some(Digit.dZero -> debug(beta))
     } else {
