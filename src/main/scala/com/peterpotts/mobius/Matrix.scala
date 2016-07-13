@@ -1,5 +1,7 @@
 package com.peterpotts.mobius
 
+import scala.math.BigDecimal.RoundingMode
+
 case class Matrix(left: Vector, right: Vector) {
   lazy val transpose = Matrix(Vector(left.top, right.top), Vector(left.bottom, right.bottom))
   lazy val determinant = left.top * right.bottom - left.bottom * right.top
@@ -10,9 +12,16 @@ case class Matrix(left: Vector, right: Vector) {
   lazy val normalize = if (normal) this else this / gcd
   lazy val range = Math.abs(left.range - right.range)
   lazy val (min, max) = if (spin < 0) (left, right) else (right, left)
-  //lazy val valid = min.top.signum >= 0 && max.bottom.signum >= 0
+
   lazy val valid = min.signum >= 0 && max.signum >= 0
   lazy val unsigned = left.signum == right.signum && right.signum != 0
+
+  lazy val decimal = {
+    val lower = min.decimal
+    val upper = max.decimal
+    val diff = upper - lower
+    lower.setScale(math.min(lower.precision, upper.precision) - diff.precision, RoundingMode.HALF_UP)
+  }
 
   def *(that: BigInt): Matrix = Matrix(left * that, right * that)
 

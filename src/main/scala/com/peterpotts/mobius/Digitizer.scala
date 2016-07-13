@@ -14,8 +14,11 @@ trait Digitizer {
 
   lazy val precision: Stream[Matrix] = head #:: fold(stream.head, stream.tail)
 
-  def debug[T](value: T): T = {
-    //println(value)
-    value
-  }
+  def +(that: Digitizer) = new FixedTensorDigitizer(Tensor.plus, this, that)
+
+  def -(that: Digitizer) = new FixedTensorDigitizer(Tensor.minus, this, that)
+
+  def *(that: Digitizer) = new FixedTensorDigitizer(Tensor.times, this, that)
+
+  def /(that: Digitizer) = new FixedTensorDigitizer(Tensor.divide, this, that)
 }

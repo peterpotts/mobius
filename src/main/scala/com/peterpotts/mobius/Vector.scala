@@ -1,15 +1,14 @@
 package com.peterpotts.mobius
 
 case class Vector(top: BigInt, bottom: BigInt) {
-  lazy val rational = BigDecimal(normalize.top) / BigDecimal(normalize.bottom)
+  lazy val decimal = BigDecimal(normalize.top) / BigDecimal(normalize.bottom)
   lazy val gcd = top gcd bottom
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
   lazy val range = top.bitLength - bottom.bitLength
 
-  lazy val signum = {
-
-    val xxx = top.signum match {
+  lazy val signum =
+    top.signum match {
       case -1 =>
         bottom.signum match {
           case -1 => -1
@@ -29,10 +28,6 @@ case class Vector(top: BigInt, bottom: BigInt) {
           case 1 => 1
         }
     }
-
-    //println(s"$this.signum = $xxx")
-    xxx
-  }
 
   lazy val unsigned = signum != 0
 

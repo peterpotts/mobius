@@ -11,6 +11,7 @@ class FixedMatrixDigitizer(matrix: Matrix, _digitizer: => Digitizer) extends Dig
       lazy val beta = Digit.dZero.inverse * matrix
       lazy val gamma = Digit.dPlus.inverse * matrix
 
+      //noinspection ScalaStyle
       if (alpha.unsigned)
         Some(Digit.dMinus -> alpha)
       else if (gamma.unsigned)

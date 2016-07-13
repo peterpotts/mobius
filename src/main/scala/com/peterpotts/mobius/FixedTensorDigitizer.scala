@@ -14,12 +14,13 @@ class FixedTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Digit
       lazy val beta = Digit.dZero.inverse * tensor
       lazy val gamma = Digit.dPlus.inverse * tensor
 
+      //noinspection ScalaStyle
       if (alpha.unsigned)
-        Some(Digit.dMinus -> debug(alpha))
+        Some(Digit.dMinus -> alpha)
       else if (gamma.unsigned)
-        Some(Digit.dPlus -> debug(gamma))
+        Some(Digit.dPlus -> gamma)
       else if (beta.unsigned)
-        Some(Digit.dZero -> debug(beta))
+        Some(Digit.dZero -> beta)
       else
         None
     }

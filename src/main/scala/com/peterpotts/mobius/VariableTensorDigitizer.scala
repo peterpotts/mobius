@@ -9,7 +9,7 @@ class VariableTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Di
   private lazy val digitize: (Matrix, Digitizer) = {
     val emit = {
       val matrix = Matrix(tensor.max, tensor.min)
-      val remnants = debug(matrix.inverse <*> tensor)
+      val remnants = matrix.inverse <*> tensor
       if (remnants.unsigned) Some(matrix -> remnants) else None
     }
 
@@ -21,6 +21,7 @@ class VariableTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Di
     }
   }
 
+  //noinspection ScalaStyle
   private lazy val absorb =
     if (tensor.range < tensor.transpose.range)
       new VariableTensorDigitizer(tensor * left.head, left.tail, right)
