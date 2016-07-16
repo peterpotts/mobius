@@ -1,6 +1,10 @@
 package com.peterpotts.mobius
 
+import scala.language.implicitConversions
+
 object Math {
+  implicit def intToDigitizer(n: Int): Digitizer = new FixedVectorDigitizer(Vector(n, 1))
+
   def sqrt(n: BigInt): Digitizer = {
     def oneTo(n: BigInt): Matrix = {
       val guess = BigInt(0).setBit(n.bitLength / 2)
@@ -24,5 +28,35 @@ object Math {
 
     val phi = new FixedMatrixDigitizer(q0, qs(1))
     sqrt(10005) / phi
+  }
+
+  val e: Digitizer = {
+    def m(n: BigInt) = Matrix(Vector(2 * n + 2, 2 * n + 1), Vector(2 * n + 1, 2 * n))
+    def ms(n: BigInt): Digitizer = new FixedMatrixDigitizer(m(n), ms(n + 1))
+    ms(0)
+  }
+
+  def log(x: Digitizer): Digitizer = {
+    //noinspection ScalaStyle
+    def t(n: BigInt) =
+    if (n == 0)
+      Tensor(Matrix(Vector(1, 0), Vector(1, 1)), Matrix(Vector(-1, 1), Vector(-1, 0)))
+    else
+      Tensor(
+        Matrix(Vector(n, 0), Vector(2 * n + 1, n + 1)),
+        Matrix(Vector(n + 1, 2 * n + 1), Vector(0, n)))
+
+    def ts(n: BigInt, x: Digitizer): Digitizer = new FixedTensorDigitizer(t(n), x, ts(n + 1, x))
+    ts(0, x)
+  }
+
+  def exp(x: Digitizer): Digitizer = {
+    def t(n: BigInt) =
+      Tensor(
+        Matrix(Vector(2 * n + 2, 2 * n + 1), Vector(2 * n + 1, 2 * n)),
+        Matrix(Vector(2 * n, 2 * n + 1), Vector(2 * n + 1, 2 * n + 2)))
+
+    def ts(n: BigInt, x: Digitizer): Digitizer = new FixedTensorDigitizer(t(n), x, ts(n + 1, x))
+    ts(0, new FixedMatrixDigitizer(Digit.sZero.inverse, x))
   }
 }

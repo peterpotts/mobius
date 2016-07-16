@@ -16,11 +16,11 @@ class FixedTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Digit
 
       //noinspection ScalaStyle
       if (alpha.unsigned)
-        Some(Digit.dMinus -> alpha)
+        Some(Digit.dMinus -> alpha.normalize)
       else if (gamma.unsigned)
-        Some(Digit.dPlus -> gamma)
+        Some(Digit.dPlus -> gamma.normalize)
       else if (beta.unsigned)
-        Some(Digit.dZero -> beta)
+        Some(Digit.dZero -> beta.normalize)
       else
         None
     }

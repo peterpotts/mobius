@@ -10,7 +10,7 @@ class VariableTensorDigitizer(tensor: Tensor, _left: => Digitizer, _right: => Di
     val emit = {
       val matrix = Matrix(tensor.max, tensor.min)
       val remnants = matrix.inverse <*> tensor
-      if (remnants.unsigned) Some(matrix -> remnants) else None
+      if (remnants.unsigned) Some(matrix -> remnants.normalize) else None
     }
 
     emit map {
