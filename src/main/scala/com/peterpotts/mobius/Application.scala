@@ -12,6 +12,9 @@ object Application extends LazyLogging {
     println("e = " + e.precision(100).decimal)
     println("log(e) = " + log(e).precision(100).decimal)
     println("exp(1 / 2) = " + exp(Vector(1, 2)).precision(100).decimal)
+
+    val x = pi.inside(Digit.dMinus, pi, e)
+    println("x = " + x.precision(100).decimal)
   }
 
   def arithmetic(): Unit = {

@@ -21,4 +21,10 @@ trait Real {
   def *(that: Real) = new UnsignedTensorReal(Tensor.times, this, that)
 
   def /(that: Real) = new UnsignedTensorReal(Tensor.divide, this, that)
+
+  def inside(digit: Matrix, x: Real, y: Real): Real = {
+    val remainder = digit.inverse * head
+    val merge = digit * head
+    if (remainder.unsigned) x else if (merge.unsigned) y else tail.inside(merge, x, y)
+  }
 }
