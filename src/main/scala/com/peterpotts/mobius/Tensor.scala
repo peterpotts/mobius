@@ -16,6 +16,9 @@ case class Tensor(left: Matrix, right: Matrix) {
       right.left.signum == right.right.signum &&
       right.right.signum != 0
 
+  lazy val info = Matrix(max, min)
+  lazy val empty = info.unsigned == info.inverse.unsigned
+
   def *(that: BigInt): Tensor = Tensor(left * that, right * that)
 
   def /(that: BigInt): Tensor = Tensor(left / that, right / that)

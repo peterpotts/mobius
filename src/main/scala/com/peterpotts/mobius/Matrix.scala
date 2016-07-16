@@ -10,11 +10,13 @@ case class Matrix(left: Vector, right: Vector) {
   lazy val gcd = left.gcd gcd right.gcd
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
-  lazy val range = Math.abs(left.range - right.range)
+  lazy val range = math.abs(left.range - right.range)
   lazy val (min, max) = if (spin < 0) (left, right) else (right, left)
 
   lazy val valid = min.signum >= 0 && max.signum >= 0
   lazy val unsigned = left.signum == right.signum && right.signum != 0
+  lazy val info = Matrix(max, min)
+  lazy val empty = info.unsigned == info.inverse.unsigned
 
   lazy val decimal = {
     val lower = min.decimal
@@ -34,12 +36,6 @@ case class Matrix(left: Vector, right: Vector) {
   def *(that: Matrix): Matrix = Matrix(this * that.left, this * that.right)
 
   def *(that: Tensor): Tensor = Tensor(this * that.left, this * that.right)
-
-  def <*>(that: Vector): Vector = (this * that).normalize
-
-  def <*>(that: Matrix): Matrix = (this * that).normalize
-
-  def <*>(that: Tensor): Tensor = (this * that).normalize
 }
 
 object Matrix {
