@@ -24,7 +24,11 @@ trait Real {
 
   def inside(digit: Matrix, x: Real, y: Real): Real = {
     val remainder = digit.inverse * head
-    val merge = digit * head
-    if (remainder.unsigned) x else if (merge.unsigned) y else tail.inside(merge, x, y)
+    println("head = " + head)
+    println("remainder = " + remainder)
+    println("remainder.unsigned = " + remainder.unsigned)
+
+    val merge = digit.inverse * Matrix(head.right, head.left)
+    if (remainder.unsigned) x else if (merge.unsigned) y else tail.inside(remainder, x, y)
   }
 }

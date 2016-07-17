@@ -13,7 +13,7 @@ object Application extends LazyLogging {
     println("log(e) = " + log(e).precision(100).decimal)
     println("exp(1 / 2) = " + exp(Vector(1, 2)).precision(100).decimal)
 
-    val x = pi.inside(Digit.dMinus, pi, e)
+    val x = e.inside(Matrix(Vector(2718,100),Vector(2718,100)), pi, e)
     println("x = " + x.precision(100).decimal)
   }
 
