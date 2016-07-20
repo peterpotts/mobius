@@ -7,6 +7,7 @@ case class Matrix(left: Vector, right: Vector) {
   lazy val determinant = left.top * right.bottom - left.bottom * right.top
   lazy val spin = determinant.signum
   lazy val inverse = Matrix(Vector(right.bottom, -left.bottom), Vector(-right.top, left.top))
+  lazy val turnover = Matrix(Vector(right.top, right.bottom), Vector(-left.top, -left.bottom))
   lazy val gcd = left.gcd gcd right.gcd
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
@@ -24,6 +25,8 @@ case class Matrix(left: Vector, right: Vector) {
     val diff = upper - lower
     lower.setScale(math.min(lower.precision, upper.precision) - diff.precision, RoundingMode.HALF_UP)
   }
+
+  //def inside(that: Matrix): Boolean = (that.inverse * this).unsigned
 
   def *(that: BigInt): Matrix = Matrix(left * that, right * that)
 

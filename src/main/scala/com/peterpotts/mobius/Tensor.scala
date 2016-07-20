@@ -19,6 +19,8 @@ case class Tensor(left: Matrix, right: Matrix) {
   lazy val info = Matrix(max, min)
   lazy val empty = info.unsigned == info.inverse.unsigned
 
+  //def inside(that: Matrix): Boolean = (that.inverse * this).unsigned
+
   def *(that: BigInt): Tensor = Tensor(left * that, right * that)
 
   def /(that: BigInt): Tensor = Tensor(left / that, right / that)

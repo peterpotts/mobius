@@ -23,12 +23,15 @@ trait Real {
   def /(that: Real) = new UnsignedTensorReal(Tensor.divide, this, that)
 
   def inside(digit: Matrix, x: Real, y: Real): Real = {
-    val remainder = digit.inverse * head
-    println("head = " + head)
-    println("remainder = " + remainder)
-    println("remainder.unsigned = " + remainder.unsigned)
+    val inside = digit.inverse * head
 
-    val merge = digit.inverse * Matrix(head.right, head.left)
-    if (remainder.unsigned) x else if (merge.unsigned) y else tail.inside(remainder, x, y)
+    val outside = digit.turnover.inverse * head
+    println("head = " + head)
+    println("inside = " + inside)
+    println("inside.unsigned = " + inside.unsigned)
+    println("outside = " + outside)
+    println("outside.unsigned = " + outside.unsigned)
+
+    if (inside.unsigned) x else if (outside.unsigned) y else tail.inside(digit * head.inverse, x, y)
   }
 }

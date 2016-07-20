@@ -13,8 +13,10 @@ object Application extends LazyLogging {
     println("log(e) = " + log(e).precision(100).decimal)
     println("exp(1 / 2) = " + exp(Vector(1, 2)).precision(100).decimal)
 
-    val x = e.inside(Matrix(Vector(2718,100),Vector(2718,100)), pi, e)
+    val x = e.inside(Matrix(Vector(2719,100),Vector(2718,100)), pi, e)
     println("x = " + x.precision(100).decimal)
+    val y = e.inside(Matrix(Vector(2718,100),Vector(2717,100)), pi, e)
+    println("y = " + y.precision(100).decimal)
   }
 
   def arithmetic(): Unit = {
