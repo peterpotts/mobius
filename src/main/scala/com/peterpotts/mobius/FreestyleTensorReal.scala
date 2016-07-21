@@ -9,10 +9,9 @@ class FreestyleTensorReal(tensor: Tensor, lazyLeft: => Real, lazyRight: => Real)
   private lazy val digitize: (Matrix, Real) = {
     val digit = tensor.info
 
-    //noinspection ScalaStyle
-    if (digit.empty)
+    if (digit.empty) {
       None
-    else {
+    } else {
       val remainder = digit.inverse * tensor
       Some(digit -> remainder.normalize)
     }
@@ -20,11 +19,13 @@ class FreestyleTensorReal(tensor: Tensor, lazyLeft: => Real, lazyRight: => Real)
     case (digit, remainder) =>
       digit -> new FreestyleTensorReal(remainder, left, right)
   } getOrElse {
-    //noinspection ScalaStyle
-    val absorb = if (tensor.range < tensor.transpose.range)
-      new FreestyleTensorReal(tensor * left.head, left.tail, right)
-    else
-      new FreestyleTensorReal(tensor ** right.head, left, right.tail)
+    val absorb = {
+      //noinspection ScalaStyle
+      if (tensor.magnitude < tensor.transpose.magnitude)
+        new FreestyleTensorReal(tensor * left.head, left.tail, right)
+      else
+        new FreestyleTensorReal(tensor ** right.head, left, right.tail)
+    }
 
     absorb.digitize
   }

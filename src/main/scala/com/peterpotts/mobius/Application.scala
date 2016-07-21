@@ -8,23 +8,27 @@ import com.typesafe.scalalogging.LazyLogging
 object Application extends LazyLogging {
   def main(args: Array[String]): Unit = {
     arithmetic()
-    println("pi = " + pi.precision(100).decimal)
-    println("e = " + e.precision(100).decimal)
-    println("log(e) = " + log(e).precision(100).decimal)
-    println("exp(1 / 2) = " + exp(Vector(1, 2)).precision(100).decimal)
+    println("pi = " + pi.decimal(100))
+    println("e = " + e.decimal(100))
+    println("log(e) = " + log(e).decimal(100))
+    println("exp(1 / 2) = " + exp(Vector(1, 2)).decimal(100))
 
-    val x = e.inside(Matrix(Vector(2719,100),Vector(2718,100)), pi, e)
-    println("x = " + x.precision(100).decimal)
-    val y = e.inside(Matrix(Vector(2718,100),Vector(2717,100)), pi, e)
-    println("y = " + y.precision(100).decimal)
+    val in = Matrix(Vector(2719, 1000), Vector(2718, 1000))
+    println(in.decimal)
+    val x = e isMemberOf in
+    println("x = " + x)
+    val out = Matrix(Vector(2718, 1000), Vector(2717, 1000))
+    println(out.decimal)
+    val y = e isMemberOf out
+    println("y = " + y)
   }
 
   def arithmetic(): Unit = {
-    println("sqrt 4 + sqrt 2 = " + (sqrt(4) + sqrt(2)).precision(100).decimal)
-    println("sqrt 4 - sqrt 2 = " + (sqrt(4) - sqrt(2)).precision(100).decimal)
-    println("sqrt 4 * sqrt 2 = " + (sqrt(4) * sqrt(2)).precision(100).decimal)
-    println("sqrt 4 / sqrt 2 = " + (sqrt(4) / sqrt(2)).precision(100).decimal)
-    println("sqrt 1 = " + sqrt(1).precision(100).decimal)
+    println("sqrt 4 + sqrt 2 = " + (sqrt(4) + sqrt(2)).decimal(100))
+    println("sqrt 4 - sqrt 2 = " + (sqrt(4) - sqrt(2)).decimal(100))
+    println("sqrt 4 * sqrt 2 = " + (sqrt(4) * sqrt(2)).decimal(100))
+    println("sqrt 4 / sqrt 2 = " + (sqrt(4) / sqrt(2)).decimal(100))
+    println("sqrt 1 = " + sqrt(1).decimal(100))
   }
 
   def shell(args: Array[String]): Unit = {

@@ -5,7 +5,7 @@ case class Vector(top: BigInt, bottom: BigInt) {
   lazy val gcd = top gcd bottom
   lazy val normal = gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
-  lazy val range = top.bitLength - bottom.bitLength
+  lazy val magnitude = top.bitLength - bottom.bitLength
 
   lazy val signum =
     top.signum match {
@@ -29,7 +29,7 @@ case class Vector(top: BigInt, bottom: BigInt) {
         }
     }
 
-  lazy val unsigned = signum != 0
+  lazy val isPositive = signum != 0
 
   def *(that: BigInt): Vector = Vector(top * that, bottom * that)
 

@@ -5,21 +5,21 @@ case class Tensor(left: Matrix, right: Matrix) {
   lazy val gcd = left.gcd gcd right.gcd
   lazy val normal = gcd == BigInt(0) || gcd == BigInt(1)
   lazy val normalize = if (normal) this else this / gcd
-  lazy val range = left.range max right.range
+  lazy val magnitude = left.magnitude max right.magnitude
   lazy val valid = left.valid && right.valid
   lazy val min = Matrix(left.min, right.min).min
   lazy val max = Matrix(left.max, right.max).max
 
-  lazy val unsigned =
+  lazy val isPositive =
     left.left.signum == left.right.signum &&
       left.right.signum == right.left.signum &&
       right.left.signum == right.right.signum &&
       right.right.signum != 0
 
   lazy val info = Matrix(max, min)
-  lazy val empty = info.unsigned == info.inverse.unsigned
+  lazy val empty = info.isPositive == info.inverse.isPositive
 
-  //def inside(that: Matrix): Boolean = (that.inverse * this).unsigned
+  def isSubsetOf(that: Matrix): Boolean = (that.inverse * this).isPositive
 
   def *(that: BigInt): Tensor = Tensor(left * that, right * that)
 

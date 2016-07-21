@@ -43,14 +43,15 @@ object Mobius {
   }
 
   def log(x: Real): Real = {
-    //noinspection ScalaStyle
-    def t(n: BigInt) =
-    if (n == 0)
-      Tensor(Matrix(Vector(1, 0), Vector(1, 1)), Matrix(Vector(-1, 1), Vector(-1, 0)))
-    else
-      Tensor(
-        Matrix(Vector(n, 0), Vector(2 * n + 1, n + 1)),
-        Matrix(Vector(n + 1, 2 * n + 1), Vector(0, n)))
+    def t(n: BigInt) = {
+      //noinspection ScalaStyle
+      if (n == 0)
+        Tensor(Matrix(Vector(1, 0), Vector(1, 1)), Matrix(Vector(-1, 1), Vector(-1, 0)))
+      else
+        Tensor(
+          Matrix(Vector(n, 0), Vector(2 * n + 1, n + 1)),
+          Matrix(Vector(n + 1, 2 * n + 1), Vector(0, n)))
+    }
 
     def ts(n: BigInt, x: Real): Real = new UnsignedTensorReal(t(n), x, ts(n + 1, x))
     ts(0, x)

@@ -7,7 +7,7 @@ class VectorReal(domain: Stream[Seq[Matrix]], vector: Vector) extends Real {
     case sign #:: digits => sign.foldLeft[Option[(Matrix, Vector)]](None) {
       case (None, digit) =>
         val remainder = digit.inverse * vector
-        if (remainder.unsigned) Some(digit -> remainder.normalize) else None
+        if (remainder.isPositive) Some(digit -> remainder.normalize) else None
       case (emit, _) => emit
     } map {
       case (digit, remainder) => digit -> new VectorReal(digits, remainder)

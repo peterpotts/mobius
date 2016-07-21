@@ -9,7 +9,7 @@ class MatrixReal(domain: Stream[Seq[Matrix]], matrix: Matrix, lazyReal: => Real)
     case sign #:: digits => sign.foldLeft[Option[(Matrix, Matrix)]](None) {
       case (None, digit) =>
         val remainder = digit.inverse * matrix
-        if (remainder.unsigned) Some(digit -> remainder.normalize) else None
+        if (remainder.isPositive) Some(digit -> remainder.normalize) else None
       case (emit, _) => emit
     } map {
       case (digit, remainder) =>
