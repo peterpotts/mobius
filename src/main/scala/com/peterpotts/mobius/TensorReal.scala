@@ -17,7 +17,6 @@ class TensorReal(domain: Stream[Seq[Matrix]], tensor: Tensor, lazyLeft: => Real,
         digit -> new TensorReal(digits, remainder, left, right)
     } getOrElse {
       val absorb = {
-        //noinspection ScalaStyle
         if (tensor.magnitude < tensor.transpose.magnitude)
           new TensorReal(digits, tensor * left.head, left.tail, right)
         else

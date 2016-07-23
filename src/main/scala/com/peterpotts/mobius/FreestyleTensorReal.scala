@@ -20,7 +20,6 @@ class FreestyleTensorReal(tensor: Tensor, lazyLeft: => Real, lazyRight: => Real)
       digit -> new FreestyleTensorReal(remainder, left, right)
   } getOrElse {
     val absorb = {
-      //noinspection ScalaStyle
       if (tensor.magnitude < tensor.transpose.magnitude)
         new FreestyleTensorReal(tensor * left.head, left.tail, right)
       else

@@ -18,7 +18,6 @@ trait Real {
   def /(that: Real): Real = new UnsignedTensorReal(Tensor.divide, this, that)
 
   def isMemberOf(matrix: Matrix): Boolean = {
-    //noinspection ScalaStyle
     if (head isSubsetOf matrix)
       true
     else if (head isSubsetOf matrix.complement)

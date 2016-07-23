@@ -44,7 +44,6 @@ object Mobius {
 
   def log(x: Real): Real = {
     def t(n: BigInt) = {
-      //noinspection ScalaStyle
       if (n == 0)
         Tensor(Matrix(Vector(1, 0), Vector(1, 1)), Matrix(Vector(-1, 1), Vector(-1, 0)))
       else
