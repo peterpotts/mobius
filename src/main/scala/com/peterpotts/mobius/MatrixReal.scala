@@ -1,5 +1,7 @@
 package com.peterpotts.mobius
 
+import scala.collection.immutable.Seq
+
 class MatrixReal(domain: Stream[Seq[Matrix]], matrix: Matrix, lazyReal: => Real) extends Real {
   private lazy val real = lazyReal
 

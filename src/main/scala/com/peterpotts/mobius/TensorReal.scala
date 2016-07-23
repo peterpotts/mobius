@@ -1,5 +1,7 @@
 package com.peterpotts.mobius
 
+import scala.collection.immutable.Seq
+
 class TensorReal(domain: Stream[Seq[Matrix]], tensor: Tensor, lazyLeft: => Real, lazyRight: => Real) extends Real {
   private lazy val left = lazyLeft
   private lazy val right = lazyRight

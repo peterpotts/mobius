@@ -1,5 +1,6 @@
 package com.peterpotts.mobius
 
+import scala.collection.immutable.Seq
 import scala.language.implicitConversions
 
 object Mobius {
@@ -42,17 +43,46 @@ object Mobius {
     ms(0)
   }
 
-  def log(x: Real): Real = {
-    def t(n: BigInt) = {
+  def log(x: Real): Real = new MatrixReal(Seq(Digit.sPlus, Digit.sMinus) #:: Digit.unsigned, x.head, x.tail).head match {
+    case Digit.sPlus => sPlusLog(x)
+    case Digit.sMinus => throw new ArithmeticException("NaN")
+  }
+
+  private def sPlusLog(x: Real): Real = {
+    val minus = Matrix(Vector(2, 1), Vector(0, 1))
+    val plus = Matrix(Vector(1, 0), Vector(3, 1))
+    val zero = Matrix(Vector(9, 1), Vector(1, 1))
+
+    val unsigned = Stream.continually(Seq(minus,plus,zero))
+    new MatrixReal(Digit.unsigned, x.head, x.tail).head match {
+      case `minus` =>
+        println("Here dMinus")
+        sPlusLog(x * e) - 1
+      case `plus` =>
+        println("Here dPlus")
+        sPlusLog(x / e) + 1
+      case `zero` =>
+        println("Here dZero")
+        sPlusLog(x * e) - 1
+    }
+  }
+
+  def dZeroLog(x: Real): Real = {
+    println("Here dZeroLog " + x.stream.take(10).reduce(_ * _))
+    def t(n: BigInt) =
       if (n == 0)
         Tensor(Matrix(Vector(1, 0), Vector(1, 1)), Matrix(Vector(-1, 1), Vector(-1, 0)))
       else
         Tensor(
           Matrix(Vector(n, 0), Vector(2 * n + 1, n + 1)),
           Matrix(Vector(n + 1, 2 * n + 1), Vector(0, n)))
-    }
 
-    def ts(n: BigInt, x: Real): Real = new UnsignedTensorReal(t(n), x, ts(n + 1, x))
+    def ts(n: BigInt, x: Real): Real =
+      if (n == 0)
+        new SignedTensorReal(t(n), x, ts(n + 1, x))
+      else
+        new UnsignedTensorReal(t(n), x, ts(n + 1, x))
+
     ts(0, x)
   }
 

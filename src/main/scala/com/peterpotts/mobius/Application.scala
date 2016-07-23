@@ -10,7 +10,8 @@ object Application extends LazyLogging {
     arithmetic()
     println("pi = " + pi.decimal(100))
     println("e = " + e.decimal(100))
-    println("log(e) = " + log(e).decimal(100))
+    println("log(e) = " + dZeroLog(new UnsignedVectorReal(Vector(99,100))).decimal(100))
+//    println("log(e) = " + log(e).decimal(100))
     println("exp(1 / 2) = " + exp(Vector(1, 2)).decimal(100))
 
     val in = Matrix(Vector(2719, 1000), Vector(2718, 1000))
