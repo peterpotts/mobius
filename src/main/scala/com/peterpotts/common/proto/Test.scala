@@ -50,3 +50,32 @@ object Test {
 
 
 }
+
+/**
+
+case class CreateMemberRequest(nonce: String, name: String)
+case class CreateMemberResponse(id: String)
+case class GetMemberRequest(id: String, anotherParam: String)
+case class GetMemberResponse(id: String, name: String)
+
+class GatewayService(implicit val actorRefFactory: ActorRefFactory) extends HttpService {
+  val route = pathPrefix("members") {
+    pathEnd {
+      entity(as[CreateMemberRequest]) { request =>
+        complete {
+          Created -> CreateMemberResponse(id = request.hashCode.toString)
+        }
+      }
+    } ~
+      path(Segment) { id =>
+        parameter('anotherParam) { anotherParam =>
+          complete {
+            val request = GetMemberRequest(id, anotherParam)
+            OK -> GetMemberResponse(id, name = request.anotherParam)
+          }
+        }
+      }
+  }
+}
+
+  */
